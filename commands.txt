@@ -1,0 +1,10 @@
+npx create-next-app@latest --typescript
+npm i sass
+npm i react-icons
+
+for consume api:
+npm i axios nookies jwt-decode
+
+for notifications:
+
+npm i react-toastify
