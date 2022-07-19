@@ -6,7 +6,7 @@ import { AuthTokenError } from "./errors/AuthTokenError";
 export function setupAPIClient(ctx = undefined) {
   let cookies = parseCookies(ctx);
   const api = axios.create({
-    baseURL: process.env.API_URL,
+    baseURL: "https://xpemstudies.herokuapp.com/",
     headers: { Authorization: `Bearer ${cookies["@nextauth.token"]}` },
   });
 

@@ -1,5 +1,5 @@
 import { FormEvent, useContext, useState } from "react";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import styles from "../../styles/home.module.scss";
 import Head from "next/head";
 import logoImg from "../../public/logo.svg";
@@ -9,6 +9,7 @@ import { Button } from "../components/ui/Button";
 import Link from "next/link";
 import { AuthContext } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
+import { canSSRGuest } from "../utils/canSSRGuest";
 
 const Home: NextPage = () => {
   const { signIn } = useContext(AuthContext);
@@ -69,5 +70,11 @@ const Home: NextPage = () => {
     </>
   );
 };
+
+export const getServerSideProps = canSSRGuest(async (ctx) => {
+  return {
+    props: {},
+  };
+});
 
 export default Home;

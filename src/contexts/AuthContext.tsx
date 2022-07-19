@@ -1,5 +1,5 @@
-import { destroyCookie, setCookie } from "nookies";
-import { createContext, ReactNode, useState } from "react";
+import { destroyCookie, parseCookies, setCookie } from "nookies";
+import { createContext, ReactNode, useEffect, useState } from "react";
 import Router from "next/router";
 import { api } from "../services/apiClient";
 import { toast } from "react-toastify";
@@ -38,6 +38,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   //if have a user, isAuthenticated
   const isAuthenticated = !!user;
+
+  useEffect(() => {
+    const { "@nextauth.token": token } = parseCookies();
+
+    if (token) {
+      api
+        .get("/me")
+        .then((res) => {
+          const { id, name, email } = res.data;
+          setUser({ id, name, email });
+        })
+        .catch(() => {
+          signOut();
+        });
+    }
+  }, []);
 
   async function signIn({ email, password }: SignInProps) {
     try {
