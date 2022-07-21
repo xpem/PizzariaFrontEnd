@@ -3,8 +3,14 @@ npm i sass
 npm i react-icons
 
 for consume api:
+
 npm i axios nookies jwt-decode
 
 for notifications:
 
 npm i react-toastify
+
+for modals
+
+npm i react-modal
+npm i @types/react-modal -D
