@@ -1,9 +1,10 @@
 import axios, { AxiosError } from "axios";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { parseCookies } from "nookies";
 import { signOut } from "../contexts/AuthContext";
 import { AuthTokenError } from "./errors/AuthTokenError";
 
-export function setupAPIClient(ctx = null) {
+export function setupAPIClient(ctx : GetServerSidePropsContext | undefined) {
   let cookies = parseCookies(ctx);
   const api = axios.create({
     baseURL: "https://xpemstudies.herokuapp.com/",

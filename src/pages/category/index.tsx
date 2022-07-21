@@ -16,7 +16,7 @@ export default function Category() {
       return;
     }
 
-    const apiClient = setupAPIClient();
+    const apiClient = setupAPIClient(undefined);
     await apiClient.post("/category", { name });
 
     toast.success("Categoria cadastrada");

@@ -70,7 +70,7 @@ export default function Product({ categoryList }: CategoryProps) {
       data.append("category_id", categories[categorySelected].id);
       data.append("file", imageAvatar);
 
-      const apiClient = setupAPIClient();
+      const apiClient = setupAPIClient(undefined);
       await apiClient.post("/product", data);
 
       toast.success("Produto cadastrado com sucesso");
