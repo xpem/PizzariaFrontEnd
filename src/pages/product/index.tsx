@@ -23,7 +23,7 @@ export default function Product({ categoryList }: CategoryProps) {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [avatarURL, setAvatarURL] = useState("");
-  const [imageAvatar, setImageAvatar] = useState(null);
+  const [imageAvatar, setImageAvatar] = useState<File | null>(null);
   const [categories, setCategories] = useState(categoryList || []);
   const [categorySelected, setCategorySelected] = useState(0);
 

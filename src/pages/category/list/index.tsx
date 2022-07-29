@@ -6,6 +6,8 @@ import { setupAPIClient } from "../../../services/api";
 import { canSSRAuth } from "../../../utils/canSSRAuth";
 import styles from "./styles.module.scss";
 import { FiEdit2, FiTrash2, FiPlus } from "react-icons/fi";
+import Router from "next/router";
+import { ButtonPrimary } from "../../../components/ui/ButtonPrimary";
 
 type CategoryProps = {
   id: string;
@@ -28,9 +30,17 @@ export default function CategoryList({ CategoryList }: CategoriesProps) {
       <div>
         <main className={styles.container}>
           <h1>Categorias</h1>
-          <button type="submit" className={styles.buttonAdd}>
-           Cadastrar
-            </button>
+          <ButtonPrimary
+            type="button"
+            onClick={() =>
+              Router.push({
+                pathname: "/category/create",
+              })
+            }
+            style={{marginTop: "1rem"}}
+          >
+            Cadastrar
+          </ButtonPrimary>
           <article className={styles.list}>
             {categories.length === 0 && (
               <span className={styles.emptyList}>
@@ -39,17 +49,22 @@ export default function CategoryList({ CategoryList }: CategoriesProps) {
             )}
             {categories.map((item) => (
               <section className={styles.Item}>
-                <div className={styles.itemButton} >
+                <div className={styles.itemButton}>
                   <div className={styles.tag}></div>
                   <span>{item.name}</span>
                 </div>
                 <div className={styles.iconsContainer}>
-                  <button className={styles.itemButton}>
-                    <FiEdit2
-                      size={25}
-                      color="#ffff3d"
-                    ></FiEdit2>
-                  </button>
+                  <ButtonPrimary
+                    className={styles.itemButton}
+                    onClick={() =>
+                      Router.push({
+                        pathname: "/category/update/",
+                        query: { id: item.id },
+                      })
+                    }
+                  >
+                    <FiEdit2 size={25} color="#ffff3d"></FiEdit2>
+                  </ButtonPrimary>
                   <button className={styles.itemButton}>
                     <FiTrash2
                       className={styles.delete}
@@ -71,8 +86,6 @@ export const getServerSideProps = canSSRAuth(
   async (ctx: GetServerSidePropsContext) => {
     const apiClient = setupAPIClient(ctx);
     const res = await apiClient.get("/category");
-
-    console.log(res.data);
     return { props: { CategoryList: res.data } };
   }
 );
