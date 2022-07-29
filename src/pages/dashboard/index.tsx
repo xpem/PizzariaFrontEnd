@@ -39,15 +39,16 @@ export type OrderItemProps = {
 
 export default function Dasboard({ OrderList }: OrderProps) {
   const [orders, setOrders] = useState(OrderList || []);
-  const [modalItem, setModalItem] = useState<OrderItemProps[]>();
+  const [modalItem, setModalItem] = useState<OrderItemProps[] | []>();
   const [modalVis, setModalVis] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   function handleCloseModal() {
     setModalVis(false);
   }
 
   async function handleOpenModalView(id: string) {
-    const apiClient = setupAPIClient();
+    const apiClient = setupAPIClient(undefined);
 
     console.log(id);
 
@@ -65,7 +66,7 @@ export default function Dasboard({ OrderList }: OrderProps) {
   }
 
   async function handleFinishItem(id: string) {
-    const apiClient = setupAPIClient();
+    const apiClient = setupAPIClient(undefined);
     await apiClient.put("/order/finish", { order_id: id });
 
     const res = await apiClient.get("/order");
@@ -75,9 +76,11 @@ export default function Dasboard({ OrderList }: OrderProps) {
   }
 
   async function handleRefreshOrders() {
-    const apiClient = setupAPIClient();
+    setLoading(true);
+    const apiClient = setupAPIClient(undefined);
     const res = await apiClient.get("/order");
     setOrders(res.data);
+    setLoading(false);
   }
 
   Modal.setAppElement("#__next");
@@ -92,7 +95,7 @@ export default function Dasboard({ OrderList }: OrderProps) {
         <main className={stl.container}>
           <div className={stl.containerHeader}>
             <h1>Últimos pedidos</h1>
-            <button onClick={handleRefreshOrders}>
+            <button onClick={handleRefreshOrders} className={stl.btnRefresh} disabled={loading}>
               <FiRefreshCcw size={25} color="#3fffa3"></FiRefreshCcw>
             </button>
           </div>
@@ -102,7 +105,9 @@ export default function Dasboard({ OrderList }: OrderProps) {
             )}
             {orders.map((item) => (
               <section className={stl.orderItem} key={item.id}>
-                <button onClick={() => handleOpenModalView(item.id)}>
+                <button
+                  onClick={() => handleOpenModalView(item.id)}           
+                >
                   <div className={stl.tag}></div>
                   <span>
                     Mesa: <strong>{item.table}</strong>

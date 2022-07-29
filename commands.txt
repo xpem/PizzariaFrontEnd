@@ -14,3 +14,10 @@ for modals
 
 npm i react-modal
 npm i @types/react-modal -D
+
+
+referencias:
+
+https://react-icons.github.io/react-icons/icons?name=fi
+
+https://www.w3schools.com/colors/colors_picker.asp

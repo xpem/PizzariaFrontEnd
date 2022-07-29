@@ -4,7 +4,7 @@ import { parseCookies } from "nookies";
 import { signOut } from "../contexts/AuthContext";
 import { AuthTokenError } from "./errors/AuthTokenError";
 
-export function setupAPIClient(ctx = undefined) {
+export function setupAPIClient(ctx: any) {
   let cookies = parseCookies(ctx);
   const api = axios.create({
     baseURL: "https://xpemstudies.herokuapp.com/",

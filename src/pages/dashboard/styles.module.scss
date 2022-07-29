@@ -21,6 +21,8 @@
   }
 }
 
+
+
 .listOrders {
   display: flex;
   flex-direction: column;
@@ -57,4 +59,28 @@
 .emptyList {
   font-size: 1.2rem;
   color: var(--gray-100);
+}
+
+.btnRefresh{
+
+  &:hover {
+    transition: transform 0.8s;
+    transform: scale(1.2);
+  }
+  
+  &[disabled] {
+    cursor: not-allowed;
+    svg {
+      animation: animate 2s infinite;
+    }
+  }
+}
+
+@keyframes animate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
 }

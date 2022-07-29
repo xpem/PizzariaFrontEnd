@@ -6,7 +6,7 @@ import styles from "./styles.module.scss";
 interface ModalOrderProps {
   isOpen: boolean;
   onRequestClose: () => void;
-  order: OrderItemProps[];
+  order: OrderItemProps[] | [] | undefined;
   handleFinishOrder: (id: string) => void;
 }
 
@@ -22,7 +22,12 @@ const customStyles = {
   },
 };
 
-export function ModalOrder({ isOpen, onRequestClose, order,handleFinishOrder }: ModalOrderProps) {
+export function ModalOrder({
+  isOpen,
+  onRequestClose,
+  order,
+  handleFinishOrder,
+}: ModalOrderProps) {
   return (
     <ReactModal
       isOpen={isOpen}
@@ -39,8 +44,8 @@ export function ModalOrder({ isOpen, onRequestClose, order,handleFinishOrder }: 
       </button>
       <div className={styles.container}>
         <h2>Detalhes do pedido</h2>
-        <span className={styles.table}>Mesa: {order[0].order.table}</span>
-        {order.map((item) => (
+        <span className={styles.table}>Mesa: {order![0].order.table}</span>
+        {order!.map((item) => (
           <section key={item.id} className={styles.containerItem}>
             <span>
               {item.amount} - <strong>{item.product.name}</strong>
@@ -51,7 +56,10 @@ export function ModalOrder({ isOpen, onRequestClose, order,handleFinishOrder }: 
           </section>
         ))}
 
-        <button className={styles.buttonOrder} onClick={() => handleFinishOrder(order[0].order_id)}>
+        <button
+          className={styles.buttonOrder}
+          onClick={() => handleFinishOrder(order![0].order_id)}
+        >
           Concluir pedido
         </button>
       </div>

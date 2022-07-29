@@ -13,8 +13,8 @@ export function Header() {
           <img src="/logo.svg" width={190} height={60}></img>
         </Link>
         <nav className={styles.menuNav}>
-          <Link href="/category">
-            <a>Categoria</a>
+          <Link href="/category/list">
+            <a>Categorias</a>
           </Link>
           <Link href="/product">
             <a>Cardápio</a>
