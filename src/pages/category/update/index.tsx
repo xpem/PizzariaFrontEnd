@@ -3,6 +3,7 @@ import Head from "next/head";
 import Router, { useRouter } from "next/router";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { ButtonPrimary } from "../../../components/ui/ButtonPrimary";
 import { Header } from "../../../components/ui/Header";
 import { setupAPIClient } from "../../../services/api";
 import { canSSRAuth } from "../../../utils/canSSRAuth";
@@ -17,6 +18,7 @@ type CategoryProps = {
 
 export default function CategoryEdit({ Category }: CategoryProps) {
   const [name, setName] = useState(Category.name);
+  const nameOri = Category.name;
   const [id, setId] = useState(Category.id);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -30,18 +32,22 @@ export default function CategoryEdit({ Category }: CategoryProps) {
       toast.warning("Defina um nome");
       return;
     }
-    try {
-      setLoading(true);
-      const apiClient = setupAPIClient(undefined);
-      const res = await apiClient.put("/category/" + id, { name });
-      console.log(res.data);
-      toast.success("Categoria Alterada");
-      setName("");
-      setLoading(false);
-    } catch (err) {
-      setLoading(false);
-      console.log(err);
-      toast.error("Ocorreu um erro ao atualizar a categoria");
+
+    if (name !== nameOri) {
+      try {
+        setLoading(true);
+        const apiClient = setupAPIClient(undefined);
+        const res = await apiClient.put("/category/" + id, { name });
+        console.log(res.data);
+        toast.success("Categoria Alterada");
+        setName("");
+        setLoading(false);
+        Router.push("/category/list");
+      } catch (err) {
+        setLoading(false);
+        console.log(err);
+        toast.error("Ocorreu um erro ao atualizar a categoria");
+      }
     }
   }
 
@@ -62,9 +68,9 @@ export default function CategoryEdit({ Category }: CategoryProps) {
               value={name}
               onChange={(e) => setName(e.target.value)}
             ></input>
-            <button type="submit" className={styles.buttonAdd}>
+            <ButtonPrimary type="submit" loading={loading}>
               Confirmar
-            </button>
+            </ButtonPrimary>
           </form>
         </main>
       </div>

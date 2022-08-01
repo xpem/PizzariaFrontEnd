@@ -77,3 +77,18 @@
   color: var(--dark-700);
   margin-top: 1rem;
 }
+
+.modalContainer {
+  width: 620px;
+  background-color: var(--dark-700);
+   color: var(--white);
+
+  h2 {
+    margin: 1rem 0;
+    color: var(--red-900);
+  }
+
+  .item {
+    font-size: 1.4rem;
+  }
+}
