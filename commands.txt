@@ -26,7 +26,6 @@ https://www.w3schools.com/colors/colors_picker.asp
 
 todo:
 
-implementar Breadcrumb
 crud para o produto, 
-terminar a exclução de categorias
 branch com cadastro sem imagem.
+busca de categorias e produtos
