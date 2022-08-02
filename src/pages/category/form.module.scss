@@ -27,3 +27,11 @@
   border: 1px solid var(--gray-100);
   margin-bottom: 1rem;
 }
+
+.itemButtonTransition {
+  transition: transform 0.8s;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}

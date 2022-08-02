@@ -5,11 +5,12 @@ import { Header } from "../../../components/ui/Header";
 import { setupAPIClient } from "../../../services/api";
 import { canSSRAuth } from "../../../utils/canSSRAuth";
 import styles from "./styles.module.scss";
-import { FiEdit2, FiTrash2, FiPlus } from "react-icons/fi";
+import { FiEdit2, FiTrash2, FiPlus, FiX } from "react-icons/fi";
 import Router from "next/router";
 import { ButtonPrimary } from "../../../components/ui/ButtonPrimary";
 import ReactModal from "react-modal";
 import { Button } from "../../../components/ui/Button";
+import { toast } from "react-toastify";
 
 type CategoryProps = {
   id: string;
@@ -36,11 +37,51 @@ export default function CategoryList({ CategoryList }: CategoriesProps) {
   const [categories, setCategories] = useState(CategoryList || []);
   const [delModalVis, setDelModalVis] = useState(false);
   const [modalItem, setModalItem] = useState<CategoryProps | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+  const filteredCaterogies =
+    search.length > 0
+      ? categories.filter((categories) => categories.name.includes(search))
+      : [];
 
   async function handleOpenModalView(Category: CategoryProps) {
     console.log(Category.name);
     setModalItem(Category);
     setDelModalVis(true);
+  }
+
+  function handleCloseModal() {
+    setDelModalVis(false);
+  }
+
+  async function handleDelete() {
+    try {
+      setLoading(true);
+
+      const apiClient = setupAPIClient(undefined);
+
+      const res = await apiClient.delete("/category/" + modalItem?.id);
+
+      toast.success("Categoria Excluída!");
+
+      handleRefreshOrders();
+
+      setLoading(false);
+
+      handleCloseModal();
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+      toast.error("Ocorreu um erro ao atualizar a categoria");
+    }
+  }
+
+  async function handleRefreshOrders() {
+    setLoading(true);
+    const apiClient = setupAPIClient(undefined);
+    const res = await apiClient.get("/category");
+    setCategories(res.data);
+    setLoading(false);
   }
 
   return (
@@ -76,8 +117,10 @@ export default function CategoryList({ CategoryList }: CategoriesProps) {
                   <span>{item.name}</span>
                 </div>
                 <div className={styles.iconsContainer}>
-                  <ButtonPrimary
-                    className={styles.itemButton}
+                  <button
+                    className={
+                      styles.itemButton + " " + styles.itemButtonTransition
+                    }
                     onClick={() =>
                       Router.push({
                         pathname: "/category/update/",
@@ -86,9 +129,11 @@ export default function CategoryList({ CategoryList }: CategoriesProps) {
                     }
                   >
                     <FiEdit2 size={25} color="#ffff3d"></FiEdit2>
-                  </ButtonPrimary>
+                  </button>
                   <button
-                    className={styles.itemButton}
+                    className={
+                      styles.itemButton + " " + styles.itemButtonTransition
+                    }
                     onClick={() => handleOpenModalView(item)}
                   >
                     <FiTrash2
@@ -106,12 +151,35 @@ export default function CategoryList({ CategoryList }: CategoriesProps) {
           <ReactModal
             isOpen={delModalVis}
             style={customStyles}
-            onRequestClose={() => setDelModalVis(false)}
+            onRequestClose={handleCloseModal}
           >
             <div className={styles.modalContainer}>
+              <button
+                type="button"
+                onClick={handleCloseModal}
+                className={
+                  styles.buttonBack + " " + styles.itemButtonTransition
+                }
+                style={{ background: "transparent", border: 0 }}
+              >
+                <FiX size={25} color="var(--white)"></FiX>
+              </button>
               <h2>Excluir Categoria</h2>
-              <span className={styles.item}> - {modalItem?.name}</span>
-              <Button>Excluir Categoria</Button>
+              <section className={styles.containerItem}>
+                <span className={styles.item}>{modalItem?.name}</span>
+              </section>
+              <div style={{ display: "flex", flexDirection: "row" }}>
+                <ButtonPrimary
+                  onClick={handleDelete}
+                  style={{
+                    width: "200px",
+                    backgroundColor: "var(--red-900)",
+                    color: "var(--white)",
+                  }}
+                >
+                  Excluir
+                </ButtonPrimary>
+              </div>
             </div>
           </ReactModal>
         )}

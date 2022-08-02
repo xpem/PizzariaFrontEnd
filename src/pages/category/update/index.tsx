@@ -2,6 +2,7 @@ import { GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import Router, { useRouter } from "next/router";
 import { FormEvent, useEffect, useState } from "react";
+import { FiArrowLeft } from "react-icons/fi";
 import { toast } from "react-toastify";
 import { ButtonPrimary } from "../../../components/ui/ButtonPrimary";
 import { Header } from "../../../components/ui/Header";
@@ -72,6 +73,14 @@ export default function CategoryEdit({ Category }: CategoryProps) {
               Confirmar
             </ButtonPrimary>
           </form>
+          <button
+            type="button"
+            onClick={() => Router.back()}
+            className={styles.itemButtonTransition}
+            style={{ background: "transparent", border: 0, alignSelf: "start" }}
+          >
+            <FiArrowLeft size={25} color="var(--white)"></FiArrowLeft>
+          </button>
         </main>
       </div>
     </>

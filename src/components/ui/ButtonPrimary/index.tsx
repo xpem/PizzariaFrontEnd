@@ -13,7 +13,7 @@ export function ButtonPrimary({ loading, children, ...rest }: ButtonPrimaryProps
       {loading ? (
         <FaSpinner color="var(--dark-700)" size={16}></FaSpinner>
       ) : (
-        <a className={styles.buttonText}>{children}</a>
+        <a>{children}</a>
       )}
     </button>
   );

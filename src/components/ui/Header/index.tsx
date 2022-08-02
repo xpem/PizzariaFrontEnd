@@ -10,7 +10,8 @@ export function Header() {
     <header className={styles.headerContainer}>
       <div className={styles.headerContent}>
         <Link href="/dashboard">
-          <img src="/logo.svg" width={190} height={60}></img>
+          <span className={styles.HeaderLogo}>Pizzaria</span>
+          {/* <img src="/logo.svg" width={190} height={60}></img> */}
         </Link>
         <nav className={styles.menuNav}>
           <Link href="/category/list">

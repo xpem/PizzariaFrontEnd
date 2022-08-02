@@ -21,8 +21,6 @@
   }
 }
 
-
-
 .listOrders {
   display: flex;
   flex-direction: column;
@@ -61,13 +59,12 @@
   color: var(--gray-100);
 }
 
-.btnRefresh{
-
+.btnRefresh {
   &:hover {
     transition: transform 0.8s;
     transform: scale(1.2);
   }
-  
+
   &[disabled] {
     cursor: not-allowed;
     svg {

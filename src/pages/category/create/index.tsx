@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Router from "next/router";
 import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { Button } from "../../../components/ui/Button";
@@ -6,6 +7,7 @@ import { ButtonPrimary } from "../../../components/ui/ButtonPrimary";
 import { Header } from "../../../components/ui/Header";
 import { setupAPIClient } from "../../../services/api";
 import styles from "../form.module.scss";
+import { FiArrowLeft } from "react-icons/fi";
 
 export default function Category() {
   const [name, setName] = useState("");
@@ -25,7 +27,7 @@ export default function Category() {
 
       const apiClient = setupAPIClient(undefined);
       const res = await apiClient.post("/category", { name });
-
+      Router.push("/category/list");
       toast.success("Categoria cadastrada");
       setName("");
 
@@ -58,6 +60,14 @@ export default function Category() {
               Cadastrar
             </ButtonPrimary>
           </form>
+          <button
+            type="button"
+            onClick={() => Router.back()}
+            className={styles.itemButtonTransition}
+            style={{ background: "transparent", border: 0, alignSelf: "start" }}
+          >
+            <FiArrowLeft size={25} color="var(--white)"></FiArrowLeft>
+          </button>
         </main>
       </div>
     </>
