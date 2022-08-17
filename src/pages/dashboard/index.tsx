@@ -39,9 +39,9 @@ export type OrderItemProps = {
 
 export default function Dasboard({ OrderList }: OrderProps) {
   const [orders, setOrders] = useState(OrderList || []);
+  const [loading, setLoading] = useState(false);
   const [modalItem, setModalItem] = useState<OrderItemProps[] | []>();
   const [modalVis, setModalVis] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   function handleCloseModal() {
     setModalVis(false);

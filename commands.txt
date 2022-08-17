@@ -15,7 +15,6 @@ for modals
 npm i react-modal
 npm i @types/react-modal -D
 
-
 referencias:
 
 https://react-icons.github.io/react-icons/icons?name=fi
@@ -29,3 +28,8 @@ todo:
 crud para o produto, 
 branch com cadastro sem imagem.
 busca de categorias e produtos
+
+
+para iniciar o sistema
+
+npm run dev
