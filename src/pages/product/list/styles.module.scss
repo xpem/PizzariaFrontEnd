@@ -1,0 +1,109 @@
+.container {
+  max-width: 720px;
+  margin: 4rem auto;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+
+  h1 {
+    color: var(--white);
+  }
+}
+
+.Item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: var(--dark-900);
+  margin-bottom: 1rem;
+  align-items: center;
+  border-radius: 0.3rem;
+
+  .itemButton {
+    border: 0;
+    background: transparent;
+    font-size: 1.2rem;
+    color: var(--white);
+    height: auto;
+    align-items: center;
+    display: flex;
+    width: 80%;
+  }
+}
+
+.itemButtonTransition {
+  transition: transform 0.8s;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+
+.tag {
+  width: 9px;
+  background-color: var(--green-900);
+  height: 65px;
+  border-radius: 0.3rem 0 0 0.3rem;
+  margin-right: 1rem;
+}
+
+.delete {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.emptyList {
+  font-size: 1.2rem;
+  color: var(--gray-100);
+}
+
+.iconsContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.buttonAdd {
+  height: 40px;
+  border: 0;
+  background-color: var(--green-900);
+  font-weight: bold;
+  font-size: 1.2rem;
+  border-radius: 0.3rem;
+  color: var(--dark-700);
+  margin-top: 1rem;
+}
+
+.CategoryName {
+  color: var(--white);
+  font-weight: bold;
+  font-size: 1.5rem;
+  padding: 0.5rem 0;
+}
+
+.nameAndPrice {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: auto;
+}
+
+.descriptionContainer {
+  padding: 0.2rem 0;
+}
+
+.description {
+  font-style: italic;
+  font-size: 1rem;
+  overflow: hidden;
+  color: var(--gray-100);
+}
+
+.productContainer {
+  width: 100%;
+}

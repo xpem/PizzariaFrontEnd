@@ -1,13 +1,14 @@
 import Head from "next/head";
-import { Header } from "../../components/ui/Header";
-import { canSSRAuth } from "../../utils/canSSRAuth";
+import { Header } from "../../../components/ui/Header";
+import { canSSRAuth } from "../../../utils/canSSRAuth";
 import stl from "./styles.module.scss";
 import { FiUpload } from "react-icons/fi";
 import { ChangeEvent, FormEvent, useState } from "react";
-import { api } from "../../services/apiClient";
-import { setupAPIClient } from "../../services/api";
+import { api } from "../../../services/apiClient";
+import { setupAPIClient } from "../../../services/api";
 import { GetServerSidePropsContext } from "next";
 import { toast } from "react-toastify";
+import CurrencyInput from "react-currency-input-field";
 
 type ItemProps = {
   id: string;
@@ -96,9 +97,9 @@ export default function Product({ categoryList }: CategoryProps) {
         <Header />
         <main className={stl.container}>
           <h1>Novo Produto</h1>
-
+          <hr style={{ color: "var(--white)" }} />
           <form className={stl.form} onSubmit={handleRegister}>
-            <label className={stl.labelAvatar}>
+            {/* <label className={stl.labelAvatar}>
               <span>
                 <FiUpload size={30} color="var(--white)"></FiUpload>
               </span>
@@ -117,8 +118,7 @@ export default function Product({ categoryList }: CategoryProps) {
                   height={250}
                 ></img>
               )}
-            </label>
-
+            </label> */}
             <select value={categorySelected} onChange={handleChangeCategory}>
               {categories.map((item, index) => {
                 return (
@@ -135,6 +135,15 @@ export default function Product({ categoryList }: CategoryProps) {
               value={name}
               onChange={(e) => setName(e.target.value)}
             ></input>
+            <CurrencyInput
+              id="input-example"
+              name="input-name"
+              placeholder="Please enter a number"
+              defaultValue={1000}
+              decimalsLimit={2}
+              onValueChange={(value, name) => console.log(value, name)}
+            />
+            ;
             <input
               className={stl.input}
               type="text"

@@ -4,6 +4,10 @@ import { canSSRAuth } from "../../../utils/canSSRAuth";
 import { setupAPIClient } from "../../../services/api";
 import { GetServerSidePropsContext } from "next";
 import { useState } from "react";
+import styles from "./styles.module.scss";
+import Router from "next/router";
+import { FiEdit2, FiTrash2, FiPlus, FiX } from "react-icons/fi";
+import { ButtonPrimary } from "../../../components/ui/ButtonPrimary";
 
 interface ProductsGroupedByCategoriesProps {
   ProductList: ProductsGroupedByCategoryProps[];
@@ -35,16 +39,89 @@ export default function ProductList({
       </Head>
       <Header></Header>
       <div>
-        {Object.keys(products).map((categoryKey) => {
-          return (
-            <div>
-              <span>{products[categoryKey as any].name}</span>
-              {products[categoryKey as any].products.map((product) => {
-                return <div>{product.name}</div>;
-              })}
-            </div>
-          );
-        })}
+        <main className={styles.container}>
+          <h1>Cardápio</h1>
+          <hr style={{ color: "var(--white)" }} />
+          <ButtonPrimary
+            type="button"
+            onClick={() =>
+              Router.push({
+                pathname: "/product/create",
+              })
+            }
+            style={{ marginTop: "1rem" }}
+          >
+            Cadastrar Produto
+          </ButtonPrimary>
+          <article className={styles.list}>
+            {products.length === 0 && (
+              <span className={styles.emptyList}>
+                Nenhum produto cadastrado
+              </span>
+            )}
+            {Object.keys(products).map((categoryKey) => {
+              return (
+                <div>
+                  {products[categoryKey as any].products.length > 0 && (
+                    <div className={styles.CategoryName}>
+                      <span>{products[categoryKey as any].name}</span>
+                    </div>
+                  )}
+                  {products[categoryKey as any].products.map((product) => {
+                    return (
+                      <section className={styles.Item}>
+                        <div className={styles.itemButton}>
+                          <div className={styles.tag}></div>
+                          <div className={styles.productContainer}>
+                            <div className={styles.nameAndPrice}>
+                              <span>{product.name}</span>
+                              <span>R$ {product.price}</span>
+                            </div>
+                            <div className={styles.descriptionContainer}>
+                              <span className={styles.description}>
+                                {product.description}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className={styles.iconsContainer}>
+                          <button
+                            className={
+                              styles.itemButton +
+                              " " +
+                              styles.itemButtonTransition
+                            }
+                            onClick={() =>
+                              Router.push({
+                                pathname: "/product/update/",
+                                query: { id: product.id },
+                              })
+                            }
+                          >
+                            <FiEdit2 size={25} color="#ffff3d"></FiEdit2>
+                          </button>
+                          <button
+                            className={
+                              styles.itemButton +
+                              " " +
+                              styles.itemButtonTransition
+                            }
+                          >
+                            <FiTrash2
+                              className={styles.delete}
+                              size={25}
+                              color="#f34748"
+                            ></FiTrash2>
+                          </button>
+                        </div>
+                      </section>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </article>
+        </main>
 
         {/* <main className={styles.container}>
           <h1>Categorias</h1>
