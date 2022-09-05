@@ -63,18 +63,18 @@ export default function ProductList({
               return (
                 <div>
                   {products[categoryKey as any].products.length > 0 && (
-                    <div className={styles.CategoryName}>
+                    <div className={styles.CategoryName} key={categoryKey}>
                       <span>{products[categoryKey as any].name}</span>
                     </div>
                   )}
                   {products[categoryKey as any].products.map((product) => {
                     return (
-                      <section className={styles.Item}>
+                      <section className={styles.Item} key={product.id}>
                         <div className={styles.itemButton}>
-                          <div className={styles.tag}></div>
+                          {/* <div className={styles.tag}></div> */}
                           <div className={styles.productContainer}>
                             <div className={styles.nameAndPrice}>
-                              <span>{product.name}</span>
+                              <span>&#x2022; {product.name}</span>
                               <span>R$ {product.price}</span>
                             </div>
                             <div className={styles.descriptionContainer}>

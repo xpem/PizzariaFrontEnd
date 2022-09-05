@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Header } from "../../../components/ui/Header";
 import { canSSRAuth } from "../../../utils/canSSRAuth";
-import stl from "./styles.module.scss";
+import stl from "../form.module.scss";
 import { FiUpload } from "react-icons/fi";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { api } from "../../../services/apiClient";
@@ -9,6 +9,8 @@ import { setupAPIClient } from "../../../services/api";
 import { GetServerSidePropsContext } from "next";
 import { toast } from "react-toastify";
 import CurrencyInput from "react-currency-input-field";
+import Router from "next/router";
+import { Value } from "sass";
 
 type ItemProps = {
   id: string;
@@ -23,27 +25,27 @@ export default function Product({ categoryList }: CategoryProps) {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [avatarURL, setAvatarURL] = useState("");
+  // const [avatarURL, setAvatarURL] = useState("");
   const [imageAvatar, setImageAvatar] = useState<File | null>(null);
   const [categories, setCategories] = useState(categoryList || []);
-  const [categorySelected, setCategorySelected] = useState(0);
+  const [categorySelected, setCategorySelected] = useState("");
 
-  function handleFile(e: ChangeEvent<HTMLInputElement>) {
-    if (!e.target.files) {
-      return;
-    }
+  // function handleFile(e: ChangeEvent<HTMLInputElement>) {
+  //   if (!e.target.files) {
+  //     return;
+  //   }
 
-    const image = e.target.files[0];
+  //   const image = e.target.files[0];
 
-    if (!image) {
-      return;
-    }
+  //   if (!image) {
+  //     return;
+  //   }
 
-    if (image.type === "image/jpeg" || image.type === "image/png") {
-      setImageAvatar(image);
-      setAvatarURL(URL.createObjectURL(e.target.files[0]));
-    }
-  }
+  //   if (image.type === "image/jpeg" || image.type === "image/png") {
+  //     setImageAvatar(image);
+  //     setAvatarURL(URL.createObjectURL(e.target.files[0]));
+  //   }
+  // }
 
   function handleChangeCategory(e: any) {
     setCategorySelected(e.target.value);
@@ -54,27 +56,33 @@ export default function Product({ categoryList }: CategoryProps) {
 
     try {
       const data = new FormData();
+      let priceValue = price.replace("R$ ", "");
 
-      if (
-        name === "" ||
-        price === "" ||
-        description === "" ||
-        imageAvatar === null
-      ) {
+      console.log(priceValue);
+      console.log(categorySelected);
+      if (name === "" || price === "") {
         toast.error("Preencha todos os campos");
         return;
       }
 
       data.append("name", name);
-      data.append("price", price);
+      data.append("price", priceValue);
       data.append("description", description);
-      data.append("category_id", categories[categorySelected].id);
-      data.append("file", imageAvatar);
+      data.append("category_id", categorySelected);
+
+      // data.append("file", imageAvatar);
 
       const apiClient = setupAPIClient(undefined);
-      await apiClient.post("/product", data);
+      console.log(data);
+      await apiClient.post("/product", {
+        name,
+        price: priceValue,
+        description,
+        category_id: categorySelected,
+      });
 
       toast.success("Produto cadastrado com sucesso");
+      Router.push("/product/list");
     } catch (err) {
       console.log(err);
       toast.error("Ocorreu um erro ao cadastrar o produto");
@@ -83,9 +91,9 @@ export default function Product({ categoryList }: CategoryProps) {
     setName("");
     setPrice("");
     setDescription("");
-    setImageAvatar(null);
-    setAvatarURL("");
-    setCategorySelected(0);
+    // setImageAvatar(null);
+    // setAvatarURL("");
+    setCategorySelected("");
   }
 
   return (
@@ -120,9 +128,9 @@ export default function Product({ categoryList }: CategoryProps) {
               )}
             </label> */}
             <select value={categorySelected} onChange={handleChangeCategory}>
-              {categories.map((item, index) => {
+              {categories.map((item) => {
                 return (
-                  <option key={item.id} value={index}>
+                  <option key={item.id} value={item.id}>
                     {item.name}
                   </option>
                 );
@@ -136,21 +144,23 @@ export default function Product({ categoryList }: CategoryProps) {
               onChange={(e) => setName(e.target.value)}
             ></input>
             <CurrencyInput
-              id="input-example"
               name="input-name"
-              placeholder="Please enter a number"
-              defaultValue={1000}
+              className={stl.input}
+              placeholder="Digite o preço do produto"
               decimalsLimit={2}
-              onValueChange={(value, name) => console.log(value, name)}
+              maxLength={6}
+              prefix="R$ "
+              decimalSeparator=","
+              groupSeparator="."
+              onChange={(e) => setPrice(e.target.value)}
             />
-            ;
-            <input
+            {/* <input
               className={stl.input}
               type="text"
               placeholder="Digite o preço do produto"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-            ></input>
+            ></input> */}
             <textarea
               className={stl.input}
               placeholder="Descreva o produto"
