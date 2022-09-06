@@ -108,3 +108,29 @@
 .productContainer {
   width: 100%;
 }
+
+.modalContainer {
+  width: 620px;
+  background-color: var(--dark-700);
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  h2 {
+    margin: 1rem 0;
+    color: var(--red-900);
+  }
+
+  .item {
+    font-size: 1.4rem;
+  }
+
+  .containerItem {
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 1rem;
+  }
+
+  .buttonBack {
+    align-self: end;
+  }
+}

@@ -8,6 +8,9 @@ import styles from "./styles.module.scss";
 import Router from "next/router";
 import { FiEdit2, FiTrash2, FiPlus, FiX } from "react-icons/fi";
 import { ButtonPrimary } from "../../../components/ui/ButtonPrimary";
+import ReactModal from "react-modal";
+import { toast } from "react-toastify";
+import axios, { AxiosError } from "axios";
 
 interface ProductsGroupedByCategoriesProps {
   ProductList: ProductsGroupedByCategoryProps[];
@@ -16,14 +19,26 @@ interface ProductsGroupedByCategoriesProps {
 export type ProductsGroupedByCategoryProps = {
   id: string;
   name: string;
-  products: Product[];
+  products: ProductProps[];
 };
 
-type Product = {
+type ProductProps = {
   id: string;
   price: string;
   description: string;
   name: string;
+};
+
+const customStyles = {
+  content: {
+    top: "50%",
+    bottom: "auto",
+    left: "50%",
+    right: "auto",
+    padding: "30px",
+    transform: "translate(-50%, -50%)",
+    backgroundColor: "#1d1d2e",
+  },
 };
 
 export default function ProductList({
@@ -31,6 +46,57 @@ export default function ProductList({
 }: ProductsGroupedByCategoriesProps) {
   const [products, setProducts] = useState(ProductList || []);
   const [loading, setLoading] = useState(false);
+  const [delModalVis, setDelModalVis] = useState(false);
+  const [modalItem, setModalItem] = useState<ProductProps | null>(null);
+
+  function handleCloseModal() {
+    setDelModalVis(false);
+  }
+
+  async function handleDelete() {
+    try {
+      setLoading(true);
+
+      const apiClient = setupAPIClient(undefined);
+      console.log(modalItem?.id);
+
+      const res = await apiClient.delete("/product/" + modalItem?.id);
+
+      toast.success("Produto Excluído!");
+
+      handleRefresh();
+
+      setLoading(false);
+
+      handleCloseModal();
+    } catch (err) {
+      let message: string = "";
+      console.log(err);
+
+      if (axios.isAxiosError(err)) {
+        const axiosError = err as AxiosError;
+
+        message = axiosError.response?.data as string;
+      } else {
+        message = "Ocorreu um erro ao Excluir o produto";
+      }
+      setLoading(false);
+      toast.error(message);
+    }
+  }
+
+  async function handleRefresh() {
+    setLoading(true);
+    const apiClient = setupAPIClient(undefined);
+    const res = await apiClient.get("/product");
+    setProducts(res.data);
+    setLoading(false);
+  }
+
+  async function handleOpenModalView(Product: ProductProps) {
+    setModalItem(Product);
+    setDelModalVis(true);
+  }
 
   return (
     <>
@@ -61,9 +127,9 @@ export default function ProductList({
             )}
             {Object.keys(products).map((categoryKey) => {
               return (
-                <div>
+                <div key={categoryKey}>
                   {products[categoryKey as any].products.length > 0 && (
-                    <div className={styles.CategoryName} key={categoryKey}>
+                    <div className={styles.CategoryName}>
                       <span>{products[categoryKey as any].name}</span>
                     </div>
                   )}
@@ -106,6 +172,7 @@ export default function ProductList({
                               " " +
                               styles.itemButtonTransition
                             }
+                            onClick={() => handleOpenModalView(product)}
                           >
                             <FiTrash2
                               className={styles.delete}
@@ -122,63 +189,7 @@ export default function ProductList({
             })}
           </article>
         </main>
-
-        {/* <main className={styles.container}>
-          <h1>Categorias</h1>
-          <ButtonPrimary
-            type="button"
-            onClick={() =>
-              Router.push({
-                pathname: "/category/create",
-              })
-            }
-            style={{ marginTop: "1rem" }}
-          >
-            Cadastrar
-          </ButtonPrimary>
-          <article className={styles.list}>
-            {categories.length === 0 && (
-              <span className={styles.emptyList}>
-                Nenhuma categoria cadastrada
-              </span>
-            )}
-            {categories.map((item) => (
-              <section className={styles.Item}>
-                <div className={styles.itemButton}>
-                  <div className={styles.tag}></div>
-                  <span>{item.name}</span>
-                </div>
-                <div className={styles.iconsContainer}>
-                  <button
-                    className={
-                      styles.itemButton + " " + styles.itemButtonTransition
-                    }
-                    onClick={() =>
-                      Router.push({
-                        pathname: "/category/update/",
-                        query: { id: item.id },
-                      })
-                    }
-                  >
-                    <FiEdit2 size={25} color="#ffff3d"></FiEdit2>
-                  </button>
-                  <button
-                    className={
-                      styles.itemButton + " " + styles.itemButtonTransition
-                    }
-                    onClick={() => handleOpenModalView(item)}
-                  >
-                    <FiTrash2
-                      className={styles.delete}
-                      size={25}
-                      color="#f34748"
-                    ></FiTrash2>
-                  </button>
-                </div>
-              </section>
-            ))}
-          </article>
-        </main>
+        {/* delete function */}
         {delModalVis && (
           <ReactModal
             isOpen={delModalVis}
@@ -214,7 +225,7 @@ export default function ProductList({
               </div>
             </div>
           </ReactModal>
-        )} */}
+        )}
       </div>
     </>
   );
